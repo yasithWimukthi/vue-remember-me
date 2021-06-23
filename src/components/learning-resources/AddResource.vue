@@ -1,4 +1,12 @@
 <template>
+    <base-dialog v-if="isInputInvalid" title="Invalid Input" @close="confirmError">
+        <template #default>
+            <p>All input fields are required. Please check again.</p>
+        </template>
+        <template #actions>
+            <base-button @click="confirmError">OK</base-button>
+        </template>
+    </base-dialog>
     <base-card>
         <form @submit.prevent="submitData">
             <div class="form-control">
@@ -23,6 +31,11 @@
 <script>
   export default {
     name: 'AddResource',
+    data(){
+      return {
+        isInputInvalid: false
+      }
+    },
     inject:['addResource'],
     methods:{
       submitData(){
@@ -30,7 +43,19 @@
         const description = this.$refs.descriptionInput.value;
         const link = this.$refs.linkInput.value;
 
+        if(
+          title.trim() === '' ||
+          description.trim() === '' ||
+          link.trim() === ''
+        ){
+          this.isInputInvalid = true;
+          return;
+        }
+
         this.addResource(title,description,link);
+      },
+      confirmError(){
+        this.isInputInvalid = false;
       }
     }
   };
