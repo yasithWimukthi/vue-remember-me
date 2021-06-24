@@ -37,7 +37,8 @@
     provide(){
       return {
         resources : this.storedResources,
-        addResource : this.addResource
+        addResource : this.addResource,
+        deleteResource : this.removeResource
       }
     },
     methods:{
@@ -53,7 +54,12 @@
         }
         this.storedResources.push(newResource);
         this.selectedTab = 'stored-resources';
+      },
+      removeResource(resId){
+        const resourceIndex = this.storedResources.findIndex(res => res.id === resId);
+        this.storedResources.splice(resourceIndex,1);
       }
+
     },
     components:{
       StoredResources,
